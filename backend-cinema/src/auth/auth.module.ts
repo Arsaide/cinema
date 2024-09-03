@@ -8,10 +8,12 @@ import { UserModule } from '../user/user.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtModule } from '@nestjs/jwt';
 import { getJwtConfig } from '../config/jwt.config';
+import { MailModule } from '../mail/mail.module';
 
 @Module({
     imports: [
         UserModule,
+        MailModule,
         ConfigModule,
         JwtModule.registerAsync({
             imports: [ConfigModule],
