@@ -6,6 +6,7 @@ import * as crypto from 'crypto';
 import * as dayjs from 'dayjs';
 import { MailService } from '../mail/mail.service';
 import { ConfigService } from '@nestjs/config';
+import { JwtService } from '@nestjs/jwt';
 
 interface TempUser {
     dto: AuthDto;
@@ -21,6 +22,7 @@ export class AuthService {
         private userService: UserService,
         private mailService: MailService,
         private configService: ConfigService,
+        private jwt: JwtService,
     ) {}
 
     async register(dto: AuthDto) {
@@ -55,11 +57,31 @@ export class AuthService {
 
         const user = await this.userService.create(tempUser.dto);
 
+        const tokens = this.issueTokens(user.id);
+
         this.tempUsers.delete(token);
 
         return {
             message: 'Email confirmed successfully!',
-            user,
+            user: {
+                name: user.name,
+                email: user.email,
+            },
+            ...tokens,
         };
+    }
+
+    private issueTokens(userId: string) {
+        const data = { id: userId };
+
+        const accessToken = this.jwt.sign(data, {
+            expiresIn: '1h',
+        });
+
+        const refreshToken = this.jwt.sign(data, {
+            expiresIn: '7d',
+        });
+
+        return { accessToken, refreshToken };
     }
 }
