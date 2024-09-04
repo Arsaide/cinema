@@ -1,5 +1,9 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from '../prisma.service';
+import {
+    BadRequestException,
+    Injectable,
+    NotFoundException,
+    UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from '../user/user.service';
 import { AuthDto } from './dto/auth.dto';
 import * as crypto from 'crypto';
@@ -7,6 +11,7 @@ import * as dayjs from 'dayjs';
 import { MailService } from '../mail/mail.service';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
+import { verify } from 'argon2';
 
 interface TempUser {
     dto: AuthDto;
@@ -18,7 +23,6 @@ export class AuthService {
     private tempUsers = new Map<string, TempUser>();
 
     constructor(
-        private prisma: PrismaService,
         private userService: UserService,
         private mailService: MailService,
         private configService: ConfigService,
@@ -71,6 +75,27 @@ export class AuthService {
         };
     }
 
+    async login(dto: AuthDto) {
+        const user = await this.validateUser(dto);
+        const tokens = this.issueTokens(user.id);
+
+        return { message: 'Login is success', user, ...tokens };
+    }
+
+    async getNewTokens(refreshToken: string) {
+        const result = await this.jwt.verify(refreshToken);
+        if (!result) throw new UnauthorizedException('Invalid refresh token!');
+
+        const user = await this.userService.getById(result.id);
+
+        const tokens = this.issueTokens(user.id);
+
+        return {
+            user,
+            ...tokens,
+        };
+    }
+
     private issueTokens(userId: string) {
         const data = { id: userId };
 
@@ -83,5 +108,17 @@ export class AuthService {
         });
 
         return { accessToken, refreshToken };
+    }
+
+    private async validateUser(dto: AuthDto) {
+        const user = await this.userService.getByEmail(dto.email);
+
+        if (!user) throw new NotFoundException('User not found!');
+
+        const isValidPassword = await verify(user.password, dto.password);
+
+        if (!isValidPassword) throw new UnauthorizedException('Invalid password!');
+
+        return user;
     }
 }
