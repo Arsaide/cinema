@@ -2,7 +2,7 @@ import { CanActivate, ExecutionContext, ForbiddenException, Injectable } from '@
 import { User, UserRole } from '@prisma/client';
 
 @Injectable()
-export class AuthGuard implements CanActivate {
+export class OnlyAdminGuard implements CanActivate {
     canActivate(context: ExecutionContext): boolean {
         const request = context.switchToHttp().getRequest<{ user: User }>();
         const user = request.user;
