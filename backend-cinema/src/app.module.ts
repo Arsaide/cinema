@@ -8,8 +8,24 @@ import { ReviewModule } from './review/review.module';
 import { MovieModule } from './movie/movie.module';
 import { FileModule } from './file/file.module';
 import { StatisticsModule } from './statistics/statistics.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
-  imports: [ConfigModule.forRoot(),AuthModule, UserModule, GenreModule, ActorModule, ReviewModule, MovieModule, FileModule, StatisticsModule],
+    imports: [
+        ConfigModule.forRoot(),
+        AuthModule,
+        UserModule,
+        GenreModule,
+        ActorModule,
+        ReviewModule,
+        MovieModule,
+        FileModule,
+        StatisticsModule,
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'uploads'),
+            serveRoot: '/uploads',
+        }),
+    ],
 })
 export class AppModule {}

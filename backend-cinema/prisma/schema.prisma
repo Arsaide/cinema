@@ -8,22 +8,18 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("create_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  email    String @unique
-  password String
-
-  name       String @default("No name")
-  avatarPath String @default("/uploads/default-avatar.png") @map("avatar_path")
-
-  role         UserRole @default(USER)
-  isHasPremium Boolean  @default(false) @map("is_has_premium")
-
-  favorites Movie[]
-  reviews   Review[]
-  payments  Payment[]
+  id           String    @id @default(cuid())
+  createdAt    DateTime  @default(now()) @map("create_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  email        String    @unique
+  password     String
+  name         String    @default("No name")
+  avatarPath   String    @default("/uploads/default-avatar.png") @map("avatar_path")
+  role         UserRole  @default(USER)
+  isHasPremium Boolean   @default(false) @map("is_has_premium")
+  favorites    Movie[]
+  payments     Payment[]
+  reviews      Review[]
 
   @@map("user")
 }
@@ -32,43 +28,34 @@ model Movie {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("create_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  title String
-  slug  String @unique
-
+  title     String
+  description String
+  slug      String   @unique
   poster    String
-  bigPoster String @map("big_poster")
-
-  year     Int    @default(0)
-  duration Int    @default(0)
-  contry   String @default("")
-
-  views Int @default(0)
-
-  videoUrl String @map("video_url")
-
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
-
-  genres  Genre[]
-  actors  Actor[]
-  reviews Review[]
+  bigPoster String   @map("big_poster")
+  year      Int      @default(0)
+  duration  Int      @default(0)
+  country    String   @default("")
+  views     Int      @default(0)
+  videoUrl  String   @map("video_url")
+  userId    String?  @map("user_id")
+  user      User?    @relation(fields: [userId], references: [id])
+  reviews   Review[]
+  actors    Actor[]  @relation("ActorToMovie")
+  genres    Genre[]  @relation("GenreToMovie")
 
   @@map("movie")
 }
 
 model Genre {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("create_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
+  id          String   @id @default(cuid())
+  createdAt   DateTime @default(now()) @map("create_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
   name        String
-  slug        String @unique
+  slug        String   @unique
   description String
-
-  icon String
-
-  movies Movie[]
+  icon        String
+  movies      Movie[]  @relation("GenreToMovie")
 
   @@map("genre")
 }
@@ -77,13 +64,10 @@ model Actor {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("create_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  name String
-  slug String @unique
-
-  photoUrl String @map("photo_url")
-
-  movies Movie[]
+  name      String
+  slug      String   @unique
+  photoUrl  String   @map("photo_url")
+  movies    Movie[]  @relation("ActorToMovie")
 
   @@map("actor")
 }
@@ -92,28 +76,24 @@ model Review {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now()) @map("create_at")
   updatedAt DateTime @updatedAt @map("updated_at")
-
-  rating Int
-  text   String
-
-  user    User?   @relation(fields: [userId], references: [id])
-  userId  String? @map("user_id")
-  movie   Movie?  @relation(fields: [movieId], references: [id])
-  movieId String? @map("movie_id")
+  rating    Int
+  text      String
+  userId    String?  @map("user_id")
+  movieId   String?  @map("movie_id")
+  movie     Movie?   @relation(fields: [movieId], references: [id])
+  user      User?    @relation(fields: [userId], references: [id])
 
   @@map("review")
 }
 
 model Payment {
-  id        String   @id @default(cuid())
-  createdAt DateTime @default(now()) @map("create_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  status PaymentStatus @default(PENDING)
-
-  amount Float   @default(0)
-  user   User?   @relation(fields: [userId], references: [id])
-  userId String? @map("user_id")
+  id        String        @id @default(cuid())
+  createdAt DateTime      @default(now()) @map("create_at")
+  updatedAt DateTime      @updatedAt @map("updated_at")
+  status    PaymentStatus @default(PENDING)
+  amount    Float         @default(0)
+  userId    String?       @map("user_id")
+  user      User?         @relation(fields: [userId], references: [id])
 
   @@map("payment")
 }
