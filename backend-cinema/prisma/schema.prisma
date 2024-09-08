@@ -41,7 +41,7 @@ model Movie {
 
   year     Int    @default(0)
   duration Int    @default(0)
-  coutry   String @default("")
+  contry   String @default("")
 
   views Int @default(0)
 
