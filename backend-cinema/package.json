@@ -43,7 +43,8 @@
     "prisma-client": "^0.0.0",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1",
-    "serve-static": "^1.15.0"
+    "serve-static": "^1.15.0",
+    "sharp": "^0.33.5"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
