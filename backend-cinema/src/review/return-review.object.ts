@@ -1,6 +1,5 @@
 import { Prisma } from '@prisma/client';
 import { returnUserObject } from '../user/return-user.object';
-import { returnMovieObject } from '../movie/return-movie.object';
 
 export const returnReviewObject: Prisma.ReviewSelect = {
     id: true,
@@ -11,6 +10,8 @@ export const returnReviewObject: Prisma.ReviewSelect = {
         select: returnUserObject,
     },
     movie: {
-        select: returnMovieObject,
+        select: {
+            id: true,
+        },
     },
 };
