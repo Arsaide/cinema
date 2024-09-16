@@ -53,8 +53,10 @@ export class UserService {
             data: {
                 favorites: {
                     set: isExists
-                        ? user.favorites.filter(movie => movie.id === movieId)
-                        : [...user.favorites, { id: movieId }],
+                        ? user.favorites
+                              .filter(movie => movie.id !== movieId)
+                              .map(movie => ({ id: movie.id })) // Сохраняем только id
+                        : [...user.favorites.map(movie => ({ id: movie.id })), { id: movieId }],
                 },
             },
         });

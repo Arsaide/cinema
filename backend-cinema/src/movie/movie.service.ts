@@ -126,7 +126,7 @@ export class MovieService {
                 description: '',
                 bigPoster: '',
                 poster: '',
-                videoUrl: '',
+                videoUrls: [],
                 year: 0,
                 duration: 0,
                 actors: {
@@ -152,7 +152,7 @@ export class MovieService {
                 description: dto.description,
                 bigPoster: dto.bigPoster,
                 poster: dto.poster,
-                videoUrl: dto.videoUrl,
+                videoUrls: dto.videoUrls,
                 year: dto.year,
                 duration: dto.duration,
                 genres: {

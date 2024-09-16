@@ -8,18 +8,28 @@ import { PrismaService } from '../prisma.service';
 export class StreamService {
     constructor(private prisma: PrismaService) {}
 
-    async streamVideo(id: string, range: string, res: Response) {
+    async streamVideo(id: string, range: string, res: Response, quality: string = '1080p') {
         const movie = await this.prisma.movie.findUnique({
             where: {
                 id,
             },
         });
 
-        if (!movie || !movie.videoUrl) {
-            throw new NotFoundException('Video not found');
+        const videoUrl = movie.videoUrls.find(url => url.includes(quality));
+
+        if (!movie || !movie.videoUrls || movie.videoUrls.length === 0) {
+            throw new NotFoundException('Video not found!');
         }
 
-        const videoPath = join(__dirname, '..', '..', movie.videoUrl);
+        if (!quality) {
+            throw new NotFoundException('Quality not specified in request!');
+        }
+
+        if (!videoUrl) {
+            throw new NotFoundException('Video with this quality not found!');
+        }
+
+        const videoPath = join(__dirname, '..', '..', videoUrl);
 
         try {
             const stats = statSync(videoPath);
@@ -59,7 +69,7 @@ export class StreamService {
                 createReadStream(videoPath).pipe(res);
             }
         } catch (error) {
-            throw new NotFoundException('Video not found');
+            throw new NotFoundException('Video not found!');
         }
     }
 }

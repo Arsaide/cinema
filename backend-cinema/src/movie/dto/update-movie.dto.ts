@@ -13,8 +13,9 @@ export class UpdateMovieDto {
     @IsString()
     bigPoster: string;
 
-    @IsString()
-    videoUrl: string;
+    @IsArray()
+    @IsString({ each: true })
+    videoUrls: string[];
 
     @IsString()
     country: string;

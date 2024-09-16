@@ -81,7 +81,7 @@ export class FileService {
                     try {
                         await unlink(filePath);
                     } catch (error) {
-                        console.error('Error deleting original video file:', error);
+                        console.error('Error delet original video', error);
                     }
 
                     return {

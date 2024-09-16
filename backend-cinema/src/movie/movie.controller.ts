@@ -34,10 +34,14 @@ export class MovieController {
 
     @Get('stream/:id')
     @Header('Content-Type', 'video/mp4')
-    async streamVideo(@Param('id') id: string, @Res() res: Response) {
+    async streamVideo(
+        @Param('id') id: string,
+        @Res() res: Response,
+        @Query('quality') quality: string,
+    ) {
         const range = res.req.headers.range;
 
-        return this.streamService.streamVideo(id, range, res);
+        return this.streamService.streamVideo(id, range, res, quality);
     }
 
     @Get('most-popular')

@@ -37,7 +37,7 @@ model Movie {
   duration  Int      @default(0)
   country    String   @default("")
   views     Int      @default(0)
-  videoUrl  String   @map("video_url")
+  videoUrls  String[]   @map("video_urls")
   userId    String?  @map("user_id")
   user      User?    @relation(fields: [userId], references: [id])
   reviews   Review[]

@@ -15,7 +15,7 @@ export const returnMovieObject: Prisma.MovieSelect = {
     duration: true,
     country: true,
     views: true,
-    videoUrl: true,
+    videoUrls: true,
     reviews: {
         orderBy: {
             createdAt: 'desc',
