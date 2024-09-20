@@ -94,6 +94,7 @@ model Payment {
   amount    Float         @default(0)
   userId    String?       @map("user_id")
   user      User?         @relation(fields: [userId], references: [id])
+  paymentUrl String? @map("payment_url")
 
   @@map("payment")
 }

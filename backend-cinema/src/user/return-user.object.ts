@@ -8,4 +8,5 @@ export const returnUserObject: Prisma.UserSelect = {
     role: true,
     password: true,
     avatarPath: true,
+    isHasPremium: true,
 };

@@ -101,6 +101,15 @@ export class UserService {
         });
     }
 
+    async updatePremiumStatus(id: string, isPremium: boolean) {
+        return this.prisma.user.update({
+            where: {
+                id,
+            },
+            data: { isHasPremium: isPremium },
+        });
+    }
+
     async delete(id: string) {
         return this.prisma.user.delete({
             where: { id },

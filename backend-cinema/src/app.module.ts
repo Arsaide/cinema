@@ -10,6 +10,7 @@ import { FileModule } from './file/file.module';
 import { StatisticsModule } from './statistics/statistics.module';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
+import { PaymentModule } from './payment/payment.module';
 
 @Module({
     imports: [
@@ -21,6 +22,7 @@ import { join } from 'path';
         ReviewModule,
         MovieModule,
         FileModule,
+        PaymentModule,
         StatisticsModule,
         ServeStaticModule.forRoot({
             rootPath: join(__dirname, '..', 'uploads'),
