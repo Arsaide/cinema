@@ -11,18 +11,12 @@ import {
     ValidationPipe,
 } from '@nestjs/common';
 import { PaymentService } from './payment.service';
-import { PrismaService } from '../prisma.service';
 import { PaymentDto } from './dto/payment.dto';
-import { UserService } from '../user/user.service';
 import { Auth } from '../auth/decorators/auth.decorator';
 
 @Controller('payments')
 export class PaymentController {
-    constructor(
-        private readonly paymentService: PaymentService,
-        private readonly service: PrismaService,
-        private readonly userService: UserService,
-    ) {}
+    constructor(private readonly paymentService: PaymentService) {}
 
     @UsePipes(new ValidationPipe())
     @HttpCode(200)
