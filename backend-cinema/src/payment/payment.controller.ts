@@ -1,9 +1,20 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Post, Query } from '@nestjs/common';
+import {
+    Body,
+    Controller,
+    Delete,
+    Get,
+    HttpCode,
+    Param,
+    Post,
+    Query,
+    UsePipes,
+    ValidationPipe,
+} from '@nestjs/common';
 import { PaymentService } from './payment.service';
 import { PrismaService } from '../prisma.service';
 import { PaymentDto } from './dto/payment.dto';
-import { PaymentStatus } from '@prisma/client';
 import { UserService } from '../user/user.service';
+import { Auth } from '../auth/decorators/auth.decorator';
 
 @Controller('payments')
 export class PaymentController {
@@ -13,42 +24,41 @@ export class PaymentController {
         private readonly userService: UserService,
     ) {}
 
-    @Post('checkout')
-    async checkout(@Body() dto: PaymentDto, @Body('userId') userId: string) {
-        return await this.paymentService.checkout(dto, userId);
+    @UsePipes(new ValidationPipe())
+    @HttpCode(200)
+    @Post()
+    @Auth()
+    checkout(@Body() dto: PaymentDto, @Body('userId') userId: string) {
+        return this.paymentService.checkout(dto, userId);
     }
 
     @Get('success')
     async paymentSuccess(@Query('token') token: string) {
-        try {
-            const orderDetails = await this.paymentService.getOrderDetails(token);
-            const customId = orderDetails.purchase_units[0]?.custom_id;
-
-            if (!customId) {
-                throw new HttpException(
-                    'Custom ID not found in PayPal response',
-                    HttpStatus.BAD_REQUEST,
-                );
-            }
-
-            // const captureResult = await this.paymentService.capturePayment(orderDetails.id);
-
-            await this.paymentService.updatePaymentStatus(customId, PaymentStatus.PAYED);
-
-            const payment = await this.paymentService.getPaymentById(customId);
-            const userId = payment.userId;
-
-            await this.userService.updatePremiumStatus(userId, true);
-
-            return { message: 'Payment successful' };
-        } catch (error) {
-            console.error(error);
-            throw new HttpException('Payment capture failed', HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        return await this.paymentService.paymentSuccess(token);
     }
 
     @Get('cancel')
+    @Auth()
     async paymentCancel() {
         return { message: 'Payment cancelled' };
+    }
+
+    @HttpCode(200)
+    @Get()
+    @Auth('admin')
+    async getAll() {
+        return this.paymentService.getAll();
+    }
+
+    @Delete(':id')
+    @Auth('admin')
+    async delete(@Param('id') id: string) {
+        return this.paymentService.delete(id);
+    }
+
+    @Post('/cancel/:id')
+    @Auth('admin')
+    async cancel(@Param('id') id: string) {
+        return this.paymentService.cancelPayment(id);
     }
 }
