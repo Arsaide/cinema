@@ -8,4 +8,4 @@ export interface IGenre {
 	icon: TypeIconName;
 }
 
-export interface IGenreEditInput extends Omit<IGenre, 'id'> {}
+export type IGenreEditInput = Omit<IGenre, 'id'>;

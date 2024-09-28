@@ -1,3 +1,5 @@
+import { IMovie } from '@/types/movie.types';
+
 export enum UserRole {
 	USER = 'USER',
 	ADMIN = 'ADMIN',
@@ -10,7 +12,7 @@ export interface IUser {
 	avatarPath: string;
 	role: UserRole;
 	isHasPremium: boolean;
-	favourites: any[];
+	favourites: IMovie[];
 }
 
-export interface IUserEditInput extends Pick<IUser, 'name' | 'email' | 'avatarPath' | 'role'> {}
+export type IUserEditInput = Pick<IUser, 'name' | 'email' | 'avatarPath' | 'role'>;

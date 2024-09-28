@@ -1,9 +1,11 @@
+import { IMovie } from '@/types/movie.types';
+
 export interface IActor {
 	id: string;
 	name: string;
 	slug: string;
 	photoUrl: string;
-	movies: any[];
+	movies: IMovie[];
 }
 
-export interface IActorEditInput extends Omit<IActor, 'id' | 'movies'> {}
+export type IActorEditInput = Omit<IActor, 'id' | 'movies'>;

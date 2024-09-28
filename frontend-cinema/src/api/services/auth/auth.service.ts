@@ -30,4 +30,4 @@ class AuthService {
 	}
 }
 
-export default new AuthService();
+export const authService = new AuthService();

@@ -2,7 +2,7 @@ import axios, { type CreateAxiosDefaults } from 'axios';
 
 import { errorCatch } from '@/api/error';
 import { getAccessToken, removeFromStorage } from '@/api/services/auth/auth-token.service';
-import authService from '@/api/services/auth/auth.service';
+import { authService } from '@/api/services/auth/auth.service';
 
 import { SERVER_URL } from '@/config/api.config';
 
