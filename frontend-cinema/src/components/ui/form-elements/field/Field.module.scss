@@ -1,7 +1,7 @@
 .field {
-	@apply text-left
+	@apply text-left;
 
-  > label {
+	> label {
 		> span {
 			@apply text-[15px] font-medium text-gray-600;
 		}

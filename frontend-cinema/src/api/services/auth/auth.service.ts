@@ -5,10 +5,10 @@ import { EnumTokens, saveToStorage } from '@/api/services/auth/auth-token.servic
 
 import { API_URL } from '@/config/api.config';
 
-import { IAuthResponse } from '@/types/auth.types';
+import { IAuthForm, IAuthResponse } from '@/types/auth.types';
 
 class AuthService {
-	async main(type: 'login' | 'register', data: IAuthResponse) {
+	async main(type: 'login' | 'register', data: IAuthForm) {
 		const response = await axiosClassic.post<IAuthResponse>(API_URL.auth(`/${type}`), data);
 
 		if (response.data.accessToken) saveToStorage(response.data);
