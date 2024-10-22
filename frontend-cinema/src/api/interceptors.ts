@@ -17,10 +17,10 @@ const axiosClassic = axios.create(options);
 const axiosWithAuth = axios.create(options);
 
 axiosWithAuth.interceptors.request.use(config => {
-	const accessToken = getAccessToken;
+	const accessToken = getAccessToken();
 
 	if (config && config.headers && accessToken)
-		config.headers.Authorization = `Bearer ${accessToken()}`;
+		config.headers.Authorization = `Bearer ${accessToken}`;
 
 	return config;
 });
