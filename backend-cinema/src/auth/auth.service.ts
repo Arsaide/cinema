@@ -56,7 +56,9 @@ export class AuthService {
         const tempUser = this.tempUsers.get(token);
 
         if (!tempUser || dayjs(tempUser.expires).isBefore(dayjs())) {
-            throw new BadRequestException('Token is invalid or has expired. Try again!');
+            throw new BadRequestException(
+                'User already exist or token is invalid or has expired. Try again',
+            );
         }
 
         const user = await this.userService.create(tempUser.dto);

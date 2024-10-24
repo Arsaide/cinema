@@ -14,3 +14,8 @@ export interface ITokens {
 export interface IAuthResponse extends ITokens {
 	user: IUser;
 }
+
+export interface IConfirmEmail extends ITokens {
+	message: string;
+	user: IUser;
+}

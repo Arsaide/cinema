@@ -10,6 +10,10 @@
 
 		> .form {
 			@apply max-w-96 w-full;
+
+			.hint {
+				@apply text-gray-600 font-light italic text-center text-xs;
+			}
 		}
 
 		.button {

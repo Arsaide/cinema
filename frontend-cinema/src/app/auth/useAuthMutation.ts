@@ -12,14 +12,22 @@ import { IAuthForm } from '@/types/auth.types';
 export const useAuthMutation = (isLoginForm: boolean, reset: UseFormReset<IAuthForm>) => {
 	const { push, refresh } = useRouter();
 
-	const { mutate } = useMutation({
+	const { mutate, isPending } = useMutation({
 		mutationKey: ['auth'],
 		mutationFn: (data: IAuthForm) => authService.main(isLoginForm ? 'login' : 'register', data),
 		onSuccess() {
-			toast.success('Login successful!');
-			reset();
-			push(DASHBOARD_URL.root());
-			refresh();
+			let successMessage;
+			if (isLoginForm) {
+				reset();
+				successMessage = 'Login successful!';
+				push(DASHBOARD_URL.root());
+				refresh();
+			} else {
+				reset();
+				successMessage =
+					'Registration successful! We have sent you an email to confirm your email!';
+			}
+			toast.success(successMessage);
 		},
 		onError(error: any) {
 			if (error.response && error.response.data && error.response.data.message) {
@@ -30,5 +38,5 @@ export const useAuthMutation = (isLoginForm: boolean, reset: UseFormReset<IAuthF
 		},
 	});
 
-	return { mutate };
+	return { mutate, isPending };
 };

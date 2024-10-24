@@ -5,7 +5,7 @@ import { EnumTokens, saveToStorage } from '@/api/services/auth/auth-token.servic
 
 import { API_URL } from '@/config/api.config';
 
-import { IAuthForm, IAuthResponse } from '@/types/auth.types';
+import { IAuthForm, IAuthResponse, IConfirmEmail } from '@/types/auth.types';
 
 class AuthService {
 	async main(type: 'login' | 'register', data: IAuthForm) {
@@ -14,6 +14,10 @@ class AuthService {
 		if (response.data.accessToken) saveToStorage(response.data);
 
 		return response;
+	}
+
+	async confirmEmail(token: string) {
+		return await axiosClassic.get<IConfirmEmail>(API_URL.auth(`/confirm?token=${token}`));
 	}
 
 	async getNewTokens() {

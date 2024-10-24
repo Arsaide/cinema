@@ -1,0 +1,23 @@
+.wrapper {
+	@apply flex items-center justify-center min-h-screen;
+
+	.centeredBlock {
+		@apply p-6 bg-gray-700 shadow-lg rounded-md text-center text-white;
+
+		.title {
+			@apply text-xl font-semibold mb-4;
+		}
+
+		.message {
+			@apply max-w-lg;
+
+			.error {
+				@apply text-red-500;
+			}
+		}
+
+		.button {
+			@apply w-6/12 mt-4;
+		}
+	}
+}

@@ -5,6 +5,7 @@ export const PUBLIC_URL = {
 
 	home: () => PUBLIC_URL.root('/'),
 	auth: () => PUBLIC_URL.root('/auth'),
+	confirm: () => PUBLIC_URL.root('/auth/confirm'),
 	explorer: () => PUBLIC_URL.root('/explorer'),
 	trending: () => PUBLIC_URL.root('/trending'),
 

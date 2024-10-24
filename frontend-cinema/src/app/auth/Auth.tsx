@@ -26,7 +26,7 @@ const Auth = () => {
 
 	const [isLoginForm, setIsLoginForm] = useState<boolean>(true);
 
-	const { mutate } = useAuthMutation(isLoginForm, reset);
+	const { mutate, isPending } = useAuthMutation(isLoginForm, reset);
 
 	const onSubmit: SubmitHandler<IAuthForm> = data => {
 		mutate(data);
@@ -40,7 +40,12 @@ const Auth = () => {
 				</Heading>
 				<form className={styles.form} onSubmit={handleSubmit(onSubmit)}>
 					<AuthFields register={register} errors={errors} isLoginForm={isLoginForm} />
-					<Button className={styles.button}>{isLoginForm ? 'Sign in' : 'Registration'}</Button>
+					{!isLoginForm && (
+						<p className={styles.hint}>*Check your email after successful registration!</p>
+					)}
+					<Button disabled={isPending} className={styles.button}>
+						{isPending ? 'Please wait...' : isLoginForm ? 'Sign in' : 'Registration'}
+					</Button>
 					<div className={styles.toggle}>
 						{isLoginForm ? "Don't have an account? - " : 'Already have an account - '}
 						<button
